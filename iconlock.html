@@ -1,0 +1,9 @@
+<script>
+function a(){
+	window.open('http://evil.com', 'x');
+	setTimeout(function(){
+		window.open('https://facebook.com:1234', 'x');
+	}, 1000);
+}
+</script> 
+<center><input type="button" class="button" value="Click here!" onclick="a()"></center>
